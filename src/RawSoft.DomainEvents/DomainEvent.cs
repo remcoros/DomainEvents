@@ -7,15 +7,15 @@ namespace RawSoft.DomainEvents
 	{
 		static DomainEvent()
 		{
-			HandlerStore = new ThreadStaticStore();
+			CallbackStore = new ThreadStaticStore();
 		}
 
-		public static IHandlerStore HandlerStore { get; set; }
+		public static ICallbackStore CallbackStore { get; set; }
 
-		public static void Register<TEvent>(Action<TEvent> handler)
+		public static void RegisterCallback<TEvent>(Action<TEvent> handler)
 			where TEvent : IDomainEvent
 		{
-			HandlerStore.Add(handler);
+			CallbackStore.Add(handler);
 		}
 
 		public static void Raise<TEvent>(TEvent args)
@@ -42,9 +42,9 @@ namespace RawSoft.DomainEvents
 				}
 			}
 
-			if (HandlerStore != null && HandlerStore.Handlers != null)
+			if (CallbackStore != null && CallbackStore.Handlers != null)
 			{
-				foreach (var handler in HandlerStore.Handlers)
+				foreach (var handler in CallbackStore.Handlers)
 				{
 					if (handler is Action<TEvent>)
 						((Action<TEvent>) handler)(args);
@@ -52,15 +52,15 @@ namespace RawSoft.DomainEvents
 			}
 		}
 
-		public static void UnregisterHandler<TEvent>(Action<TEvent> handler)
+		public static void UnregisterCallback<TEvent>(Action<TEvent> handler)
 			where TEvent : IDomainEvent
 		{
-			HandlerStore.Remove(handler);
+			CallbackStore.Remove(handler);
 		}
 
-		public static void ClearHandlers()
+		public static void ClearCallbacks()
 		{
-			HandlerStore.Clear();
+			CallbackStore.Clear();
 		}
 	}
 }

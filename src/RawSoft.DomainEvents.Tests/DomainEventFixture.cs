@@ -9,12 +9,12 @@ namespace RawSoft.DomainEvents.Tests
 	public class DomainEventFixture
 	{
 		[Test]
-		public void RaiseEventShouldCallAllRegisteredHandlers()
+		public void RaiseEventShouldCallAllRegisteredCallbacks()
 		{
 			bool called = false;
 			Action<TestEvent> handler = x => called = true;
 
-			DomainEvent.Register(handler);
+			DomainEvent.RegisterCallback(handler);
 			DomainEvent.Raise(new TestEvent());
 
 			Assert.That(called, Is.EqualTo(true));
@@ -37,27 +37,41 @@ namespace RawSoft.DomainEvents.Tests
 		}
 
 		[Test]
-		public void RegisterHandlerAddsHandlerToStore()
+		public void RegisterCallbackAddsCallbackToStore()
 		{
 			Action<TestEvent> handler = x => { };
 
-			DomainEvent.Register(handler);
+			DomainEvent.RegisterCallback(handler);
 
-			Assert.That(DomainEvent.HandlerStore.Handlers, Has.Member(handler));
+			Assert.That(DomainEvent.CallbackStore.Handlers, Has.Member(handler));
 		}
 
 		[Test]
-		public void UnRegisterHandlerShouldRemoveHandlerFromStore()
+		public void UnRegisterCallbackShouldRemoveCallbackFromStore()
 		{
 			Action<TestEvent> handler = x => { };
 
-			DomainEvent.Register(handler);
+			DomainEvent.RegisterCallback(handler);
 
-			Assert.That(DomainEvent.HandlerStore.Handlers, Has.Member(handler));
+			Assert.That(DomainEvent.CallbackStore.Handlers, Has.Member(handler));
 
-			DomainEvent.UnregisterHandler(handler);
+			DomainEvent.UnregisterCallback(handler);
 
-			Assert.That(DomainEvent.HandlerStore.Handlers, Has.No.Member(handler));
+			Assert.That(DomainEvent.CallbackStore.Handlers, Has.No.Member(handler));
+		}
+
+		[Test]
+		public void ClearCallbacksShouldRemoveAllCallbacksFromStore()
+		{
+			Action<TestEvent> handler = x => { };
+
+			DomainEvent.RegisterCallback(handler);
+
+			Assert.That(DomainEvent.CallbackStore.Handlers, Has.Member(handler));
+
+			DomainEvent.ClearCallbacks();
+
+			Assert.That(DomainEvent.CallbackStore.Handlers, Is.Null);
 		}
 	}
 

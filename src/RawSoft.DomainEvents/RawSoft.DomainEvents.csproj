@@ -52,7 +52,7 @@
     <Compile Include="DomainEvent.cs" />
     <Compile Include="Handles.cs" />
     <Compile Include="IDomainEvent.cs" />
-    <Compile Include="IHandlerStore.cs" />
+    <Compile Include="ICallbackStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ThreadStaticStore.cs" />
   </ItemGroup>

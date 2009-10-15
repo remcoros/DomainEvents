@@ -3,11 +3,11 @@ namespace RawSoft.DomainEvents
 	using System;
 	using System.Collections.Generic;
 
-	public class ThreadStaticStore : IHandlerStore
+	public class ThreadStaticStore : ICallbackStore
 	{
 		[ThreadStatic] static IList<Delegate> handlers;
 
-		#region IHandlerStore Members
+		#region ICallbackStore Members
 
 		public IEnumerable<Delegate> Handlers
 		{
