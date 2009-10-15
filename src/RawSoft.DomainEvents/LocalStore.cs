@@ -2,13 +2,41 @@ namespace RawSoft.DomainEvents
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Web;
 
 	/// <summary>
-	/// A thread static store for callbacks
+	/// A local store for callbacks
 	/// </summary>
-	public class ThreadStaticStore : ICallbackStore
+	public class LocalStore : ICallbackStore
 	{
+		private static readonly string StoreKey = typeof(LocalStore).FullName + "_callbacks";
+
 		[ThreadStatic] static IList<Delegate> callbacks;
+
+		protected IList<Delegate> CallbacksInternal
+		{
+			get
+			{
+				if (HttpContext.Current != null)
+				{
+					var lst = HttpContext.Current.Items[StoreKey] as IList<Delegate>;
+					if (lst == null)
+					{
+						lst = new List<Delegate>();
+						HttpContext.Current.Items[StoreKey] = lst;
+					}
+
+					return lst;
+				}
+
+				if (callbacks == null)
+				{
+					callbacks = new List<Delegate>();
+				}
+
+				return callbacks;
+			}
+		}
 
 		#region ICallbackStore Members
 
@@ -18,7 +46,7 @@ namespace RawSoft.DomainEvents
 		/// <value>The callbacks.</value>
 		public IEnumerable<Delegate> Callbacks
 		{
-			get { return callbacks; }
+			get { return CallbacksInternal; }
 		}
 
 		/// <summary>
@@ -26,7 +54,7 @@ namespace RawSoft.DomainEvents
 		/// </summary>
 		public void Clear()
 		{
-			callbacks.Clear();
+			CallbacksInternal.Clear();
 		}
 
 		/// <summary>
@@ -36,12 +64,7 @@ namespace RawSoft.DomainEvents
 		/// <param name="callback">The callback.</param>
 		public void Add<TEvent>(Action<TEvent> callback)
 		{
-			if (callbacks == null)
-			{
-				callbacks = new List<Delegate>();
-			}
-
-			callbacks.Add(callback);
+			CallbacksInternal.Add(callback);
 		}
 
 		/// <summary>
@@ -51,7 +74,7 @@ namespace RawSoft.DomainEvents
 		/// <param name="callback">The callback.</param>
 		public void Remove<TEvent>(Action<TEvent> callback)
 		{
-			callbacks.Remove(callback);
+			CallbacksInternal.Remove(callback);
 		}
 
 		#endregion

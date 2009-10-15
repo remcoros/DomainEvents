@@ -12,7 +12,7 @@ namespace RawSoft.DomainEvents
 	{
 		static DomainEvent()
 		{
-			CallbackStore = new ThreadStaticStore();
+			CallbackStore = new LocalStore();
 		}
 
 		/// <summary>
