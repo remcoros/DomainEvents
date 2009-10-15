@@ -1,16 +1,14 @@
 namespace RawSoft.DomainEvents
 {
 	using System;
+	using Microsoft.Practices.ServiceLocation;
 
 	public static class DomainEvent
 	{
 		static DomainEvent()
 		{
-			HandlerResolver = new SimpleResolver();
 			HandlerStore = new ThreadStaticStore();
 		}
-
-		public static IHandlerResolver HandlerResolver { get; set; }
 
 		public static IHandlerStore HandlerStore { get; set; }
 
@@ -23,9 +21,18 @@ namespace RawSoft.DomainEvents
 		public static void Raise<TEvent>(TEvent args)
 			where TEvent : IDomainEvent
 		{
-			if (HandlerResolver != null)
+			IServiceLocator locator = null;
+			try
 			{
-				var handlers = HandlerResolver.ResolveAll<TEvent>();
+				locator = ServiceLocator.Current;
+			}
+			catch (NullReferenceException)
+			{
+			}
+
+			if (locator != null)
+			{
+				var handlers = locator.GetAllInstances<Handles<TEvent>>();
 				if (handlers != null)
 				{
 					foreach (var handler in handlers)
@@ -37,7 +44,7 @@ namespace RawSoft.DomainEvents
 
 			if (HandlerStore != null && HandlerStore.Handlers != null)
 			{
-				foreach (Delegate handler in HandlerStore.Handlers)
+				foreach (var handler in HandlerStore.Handlers)
 				{
 					if (handler is Action<TEvent>)
 						((Action<TEvent>) handler)(args);
