@@ -3,35 +3,55 @@ namespace RawSoft.DomainEvents
 	using System;
 	using System.Collections.Generic;
 
+	/// <summary>
+	/// A thread static store for callbacks
+	/// </summary>
 	public class ThreadStaticStore : ICallbackStore
 	{
-		[ThreadStatic] static IList<Delegate> handlers;
+		[ThreadStatic] static IList<Delegate> callbacks;
 
 		#region ICallbackStore Members
 
-		public IEnumerable<Delegate> Handlers
+		/// <summary>
+		/// Gets the callbacks in this store.
+		/// </summary>
+		/// <value>The callbacks.</value>
+		public IEnumerable<Delegate> Callbacks
 		{
-			get { return handlers; }
+			get { return callbacks; }
 		}
 
+		/// <summary>
+		/// Clear all callbacks from this store.
+		/// </summary>
 		public void Clear()
 		{
-			handlers = null;
+			callbacks.Clear();
 		}
 
-		public void Add<TEvent>(Action<TEvent> handler)
+		/// <summary>
+		/// Adds the specified callback.
+		/// </summary>
+		/// <typeparam name="TEvent">The type of the event.</typeparam>
+		/// <param name="callback">The callback.</param>
+		public void Add<TEvent>(Action<TEvent> callback)
 		{
-			if (handlers == null)
+			if (callbacks == null)
 			{
-				handlers = new List<Delegate>();
+				callbacks = new List<Delegate>();
 			}
 
-			handlers.Add(handler);
+			callbacks.Add(callback);
 		}
 
-		public void Remove<TEvent>(Action<TEvent> handler)
+		/// <summary>
+		/// Removes the specified callback.
+		/// </summary>
+		/// <typeparam name="TEvent">The type of the event.</typeparam>
+		/// <param name="callback">The callback.</param>
+		public void Remove<TEvent>(Action<TEvent> callback)
 		{
-			handlers.Remove(handler);
+			callbacks.Remove(callback);
 		}
 
 		#endregion

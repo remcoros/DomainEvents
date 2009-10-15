@@ -43,7 +43,7 @@ namespace RawSoft.DomainEvents.Tests
 
 			DomainEvent.RegisterCallback(handler);
 
-			Assert.That(DomainEvent.CallbackStore.Handlers, Has.Member(handler));
+			Assert.That(DomainEvent.CallbackStore.Callbacks, Has.Member(handler));
 		}
 
 		[Test]
@@ -53,11 +53,11 @@ namespace RawSoft.DomainEvents.Tests
 
 			DomainEvent.RegisterCallback(handler);
 
-			Assert.That(DomainEvent.CallbackStore.Handlers, Has.Member(handler));
+			Assert.That(DomainEvent.CallbackStore.Callbacks, Has.Member(handler));
 
 			DomainEvent.UnregisterCallback(handler);
 
-			Assert.That(DomainEvent.CallbackStore.Handlers, Has.No.Member(handler));
+			Assert.That(DomainEvent.CallbackStore.Callbacks, Has.No.Member(handler));
 		}
 
 		[Test]
@@ -67,11 +67,11 @@ namespace RawSoft.DomainEvents.Tests
 
 			DomainEvent.RegisterCallback(handler);
 
-			Assert.That(DomainEvent.CallbackStore.Handlers, Has.Member(handler));
+			Assert.That(DomainEvent.CallbackStore.Callbacks, Has.Member(handler));
 
 			DomainEvent.ClearCallbacks();
 
-			Assert.That(DomainEvent.CallbackStore.Handlers, Is.Null);
+			Assert.That(DomainEvent.CallbackStore.Callbacks, Is.Empty);
 		}
 	}
 

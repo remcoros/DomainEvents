@@ -3,6 +3,11 @@ namespace RawSoft.DomainEvents
 	using System;
 	using Microsoft.Practices.ServiceLocation;
 
+	/// <summary>
+	/// Use this class to raise events in your domein.
+	/// It uses the common service locator to resolve handlers.
+	/// When unit testing, you can use the Register/Unregister methods to create callbacks.
+	/// </summary>
 	public static class DomainEvent
 	{
 		static DomainEvent()
@@ -10,15 +15,29 @@ namespace RawSoft.DomainEvents
 			CallbackStore = new ThreadStaticStore();
 		}
 
+		/// <summary>
+		/// Gets or sets the callback store.
+		/// </summary>
+		/// <value>The callback store.</value>
 		public static ICallbackStore CallbackStore { get; set; }
 
-		public static void RegisterCallback<TEvent>(Action<TEvent> handler)
+		/// <summary>
+		/// Registers the callback.
+		/// </summary>
+		/// <typeparam name="TEvent">The type of the event.</typeparam>
+		/// <param name="callback">The callback.</param>
+		public static void RegisterCallback<TEvent>(Action<TEvent> callback)
 			where TEvent : IDomainEvent
 		{
-			CallbackStore.Add(handler);
+			CallbackStore.Add(callback);
 		}
 
-		public static void Raise<TEvent>(TEvent args)
+		/// <summary>
+		/// Raises a domain event.
+		/// </summary>
+		/// <typeparam name="TEvent">The type of the event.</typeparam>
+		/// <param name="@event">The domain event.</param>
+		public static void Raise<TEvent>(TEvent @event)
 			where TEvent : IDomainEvent
 		{
 			IServiceLocator locator = null;
@@ -37,27 +56,35 @@ namespace RawSoft.DomainEvents
 				{
 					foreach (var handler in handlers)
 					{
-						handler.Handle(args);
+						handler.Handle(@event);
 					}
 				}
 			}
 
-			if (CallbackStore != null && CallbackStore.Handlers != null)
+			if (CallbackStore != null && CallbackStore.Callbacks != null)
 			{
-				foreach (var handler in CallbackStore.Handlers)
+				foreach (var handler in CallbackStore.Callbacks)
 				{
 					if (handler is Action<TEvent>)
-						((Action<TEvent>) handler)(args);
+						((Action<TEvent>) handler)(@event);
 				}
 			}
 		}
 
-		public static void UnregisterCallback<TEvent>(Action<TEvent> handler)
+		/// <summary>
+		/// Unregisters the callback.
+		/// </summary>
+		/// <typeparam name="TEvent">The type of the event.</typeparam>
+		/// <param name="callback">The callback.</param>
+		public static void UnregisterCallback<TEvent>(Action<TEvent> callback)
 			where TEvent : IDomainEvent
 		{
-			CallbackStore.Remove(handler);
+			CallbackStore.Remove(callback);
 		}
 
+		/// <summary>
+		/// Clears all registered callbacks.
+		/// </summary>
 		public static void ClearCallbacks()
 		{
 			CallbackStore.Clear();
