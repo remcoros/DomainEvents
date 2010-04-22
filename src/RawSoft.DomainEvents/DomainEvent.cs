@@ -37,22 +37,13 @@ namespace RawSoft.DomainEvents
 		/// Raises a domain event.
 		/// </summary>
 		/// <typeparam name="TEvent">The type of the event.</typeparam>
-		/// <param name="@event">The domain event.</param>
+		/// <param name="event">The domain event.</param>
 		public static void Raise<TEvent>(TEvent @event)
 			where TEvent : IDomainEvent
 		{
-			IServiceLocator locator = null;
-			try
+			if (ServiceLocator.Current != null)
 			{
-				locator = ServiceLocator.Current;
-			}
-			catch (NullReferenceException)
-			{
-			}
-
-			if (locator != null)
-			{
-				var handlers = locator.GetAllInstances<Handles<TEvent>>();
+				var handlers = ServiceLocator.Current.GetAllInstances<Handles<TEvent>>();
 				if (handlers != null)
 				{
 					foreach (var handler in handlers)

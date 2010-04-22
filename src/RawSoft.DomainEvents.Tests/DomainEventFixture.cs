@@ -8,6 +8,18 @@ namespace RawSoft.DomainEvents.Tests
 	[TestFixture]
 	public class DomainEventFixture
 	{
+		[SetUp]
+		public void SetUp()
+		{
+			ServiceLocator.SetLocatorProvider(() => null);
+		}
+
+		[Test]
+		public void test()
+		{
+			Assert.That(ServiceLocator.Current, Is.Null);
+		}
+
 		[Test]
 		public void RaiseEventShouldCallAllRegisteredCallbacks()
 		{
