@@ -26,10 +26,11 @@ namespace RawSoft.DomainEvents
 		/// </summary>
 		/// <typeparam name="TEvent">The type of the event.</typeparam>
 		/// <param name="callback">The callback.</param>
-		public static void RegisterCallback<TEvent>(Action<TEvent> callback)
+		public static IDisposable RegisterCallback<TEvent>(Action<TEvent> callback)
 			where TEvent : IDomainEvent
 		{
 			CallbackStore.Add(callback);
+			return new DomainEventCallbackRemover(() => CallbackStore.Remove(callback));
 		}
 
 		/// <summary>
@@ -88,6 +89,24 @@ namespace RawSoft.DomainEvents
 		public static void ClearCallbacks()
 		{
 			CallbackStore.Clear();
+		}
+
+		/// <summary>
+		/// Used for removing a registered domain event callback
+		/// </summary>
+		private sealed class DomainEventCallbackRemover : IDisposable
+		{
+			private readonly Action dispose;
+
+			public DomainEventCallbackRemover(Action disposeCallback)
+			{
+				this.dispose = disposeCallback;
+			}
+
+			public void Dispose()
+			{
+				dispose();
+			}
 		}
 	}
 }

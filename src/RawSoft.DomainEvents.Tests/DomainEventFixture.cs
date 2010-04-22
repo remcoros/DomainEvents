@@ -73,6 +73,19 @@ namespace RawSoft.DomainEvents.Tests
 
 			Assert.That(DomainEvent.CallbackStore.Callbacks, Is.Empty);
 		}
+
+		[Test]
+		public void Can_use_disposable_pattern()
+		{
+			Action<TestEvent> handler = x => { };
+
+			using (DomainEvent.RegisterCallback(handler))
+			{
+				Assert.That(DomainEvent.CallbackStore.Callbacks, Has.Member(handler));
+			}
+
+			Assert.That(DomainEvent.CallbackStore.Callbacks, Has.No.Member(handler));			
+		}
 	}
 
 	public class TestEvent : IDomainEvent
