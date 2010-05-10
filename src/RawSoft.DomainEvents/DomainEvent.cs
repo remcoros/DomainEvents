@@ -43,7 +43,7 @@ namespace RawSoft.DomainEvents
 		{
 			if (ServiceLocator.Current != null)
 			{
-				var handlers = ServiceLocator.Current.GetAllInstances<Handles<TEvent>>();
+				var handlers = ServiceLocator.Current.GetAllInstances<IHandle<TEvent>>();
 				if (handlers != null)
 				{
 					foreach (var handler in handlers)

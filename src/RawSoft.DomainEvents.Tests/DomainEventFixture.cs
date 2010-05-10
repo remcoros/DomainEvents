@@ -37,9 +37,9 @@ namespace RawSoft.DomainEvents.Tests
 		{
 			var container = MockRepository.GenerateStub<IServiceLocator>();
 			ServiceLocator.SetLocatorProvider(() => container);
-			var handler = MockRepository.GenerateStub<Handles<TestEvent>>();
+			var handler = MockRepository.GenerateStub<IHandle<TestEvent>>();
 
-			container.Stub(x => x.GetAllInstances<Handles<TestEvent>>())
+			container.Stub(x => x.GetAllInstances<IHandle<TestEvent>>())
 				.Return(new[] {handler});
 
 			var @event = new TestEvent();

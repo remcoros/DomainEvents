@@ -51,7 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DomainEvent.cs" />
-    <Compile Include="Handles.cs" />
+    <Compile Include="IHandle.cs" />
     <Compile Include="IDomainEvent.cs" />
     <Compile Include="ICallbackStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
