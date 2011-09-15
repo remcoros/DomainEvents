@@ -74,6 +74,7 @@
     <Compile Include="IHandlerLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LocalStore.cs" />
+    <Compile Include="SimpleHandlerLocator.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
