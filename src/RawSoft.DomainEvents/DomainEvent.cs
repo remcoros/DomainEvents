@@ -1,7 +1,6 @@
 namespace RawSoft.DomainEvents
 {
 	using System;
-	using Microsoft.Practices.ServiceLocation;
 
 	/// <summary>
 	/// Use this class to raise events in your domein.
@@ -20,6 +19,8 @@ namespace RawSoft.DomainEvents
 		/// </summary>
 		/// <value>The callback store.</value>
 		public static ICallbackStore CallbackStore { get; set; }
+
+		public static IHandlerLocator HandlerLocator;
 
 		/// <summary>
 		/// Registers the callback.
@@ -41,9 +42,9 @@ namespace RawSoft.DomainEvents
 		public static void Raise<TEvent>(TEvent @event)
 			where TEvent : IDomainEvent
 		{
-			if (ServiceLocator.Current != null)
+			if (HandlerLocator != null)
 			{
-				var handlers = ServiceLocator.Current.GetAllInstances<IHandle<TEvent>>();
+				var handlers = HandlerLocator.GetHandlersFor<TEvent>();
 				if (handlers != null)
 				{
 					foreach (var handler in handlers)

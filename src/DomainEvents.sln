@@ -1,9 +1,11 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RawSoft.DomainEvents", "RawSoft.DomainEvents\RawSoft.DomainEvents.csproj", "{B87131CD-BA5D-45D3-91AE-35705C6DFF76}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RawSoft.DomainEvents.Tests", "RawSoft.DomainEvents.Tests\RawSoft.DomainEvents.Tests.csproj", "{41DD5193-4A27-440C-8B54-CE3688E11105}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RawSoft.DomainEvents.CSL", "RawSoft.DomainEvents.CSL\RawSoft.DomainEvents.CSL.csproj", "{ED53DA31-01C1-4995-84E8-EBB60446CA32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,6 +21,10 @@ Global
 		{41DD5193-4A27-440C-8B54-CE3688E11105}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41DD5193-4A27-440C-8B54-CE3688E11105}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41DD5193-4A27-440C-8B54-CE3688E11105}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED53DA31-01C1-4995-84E8-EBB60446CA32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED53DA31-01C1-4995-84E8-EBB60446CA32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED53DA31-01C1-4995-84E8-EBB60446CA32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED53DA31-01C1-4995-84E8-EBB60446CA32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

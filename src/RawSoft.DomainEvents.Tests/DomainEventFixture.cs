@@ -1,7 +1,6 @@
 namespace RawSoft.DomainEvents.Tests
 {
 	using System;
-	using Microsoft.Practices.ServiceLocation;
 	using NUnit.Framework;
 	using Rhino.Mocks;
 
@@ -11,13 +10,6 @@ namespace RawSoft.DomainEvents.Tests
 		[SetUp]
 		public void SetUp()
 		{
-			ServiceLocator.SetLocatorProvider(() => null);
-		}
-
-		[Test]
-		public void test()
-		{
-			Assert.That(ServiceLocator.Current, Is.Null);
 		}
 
 		[Test]
@@ -35,11 +27,11 @@ namespace RawSoft.DomainEvents.Tests
 		[Test]
 		public void RaiseEventShouldCallHandlersFromContainer()
 		{
-			var container = MockRepository.GenerateStub<IServiceLocator>();
-			ServiceLocator.SetLocatorProvider(() => container);
+			var container = MockRepository.GenerateStub<IHandlerLocator>();
+			DomainEvent.HandlerLocator = container;
 			var handler = MockRepository.GenerateStub<IHandle<TestEvent>>();
 
-			container.Stub(x => x.GetAllInstances<IHandle<TestEvent>>())
+			container.Stub(x => x.GetHandlersFor<TestEvent>())
 				.Return(new[] {handler});
 
 			var @event = new TestEvent();
